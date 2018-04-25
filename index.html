@@ -1,10 +1,554 @@
+<!DOCTYPE html>
 <html>
-	<head>
-		<script type="text/javascript" src="./js/chess.js"></script>
-	</head>
-	<body>
-		<h1>你好，想下棋吗？</h1>
-		<canvas width="256" height="256" id="testCanvas"></canvas>
-		<input type="button" value="Run" onclick="pic()" />
-	</body>
-<html> 
+<head>
+<title>Learning-Environment-Design-Agents</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+<base href='file:\\\D:\workspace_unity3d\ml-agents-0.3.0b\docs\'/>
+</head>
+<body>
+<h1>Agents</h1>
+<p>An agent is an actor that can observe its environment and decide on the best course of action using those observations. Create agents in Unity by extending the Agent class. The most important aspects of creating agents that can successfully learn are the observations the agent collects and, for reinforcement learning, the reward you assign to estimate the value of the agent's current state toward accomplishing its tasks.</p>
+<p>An agent passes its observations to its brain. The brain, then, makes a decision and passes the chosen action back to the agent. Your agent code must execute the action, for example, move the agent in one direction or another. In order to <a href="Learning-Environment-Design.md">train an agent using reinforcement learning</a>, your agent must calculate a reward value at each action. The reward is used to discover the optimal decision-making policy. (A reward is not used by already trained agents or for imitation learning.) </p>
+<p>The Brain class abstracts out the decision making logic from the agent itself so that you can use the same brain in multiple agents. 
+How a brain makes its decisions depends on the type of brain it is. An <strong>External</strong> brain simply passes the observations from its agents to an external process and then passes the decisions made externally back to the agents. An <strong>Internal</strong> brain uses the trained policy parameters to make decisions (and no longer adjusts the parameters in search of a better decision). The other types of brains do not directly involve training, but you might find them useful as part of a training project. See <a href="Learning-Environment-Design-Brains.md">Brains</a>.</p>
+<h2>Decisions</h2>
+<p>The observation-decision-action-reward cycle repeats after a configurable number of simulation steps (the frequency defaults to once-per-step). You can also set up an agent to request decisions on demand. Making decisions at regular step intervals is generally most appropriate for physics-based simulations. Making decisions on demand is generally appropriate for situations where agents only respond to specific events or take actions of variable duration. For example, an agent in a robotic simulator that must provide fine-control of joint torques should make its decisions every step of the simulation. On the other hand, an agent that only needs to make decisions when certain game or simulation events occur, should use on-demand decision making.  
+</p>
+<p>To control the frequency of step-based decision making, set the <strong>Decision Frequency</strong> value for the Agent object in the Unity Inspector window. Agents using the same Brain instance can use a different frequency. During simulation steps in which no decision is requested, the agent receives the same action chosen by the previous decision.</p>
+<h3>On Demand Decision Making</h3>
+<p>On demand decision making allows agents to request decisions from their 
+brains only when needed instead of receiving decisions at a fixed 
+frequency. This is useful when the agents commit to an action for a 
+variable number of steps or when the agents cannot make decisions 
+at the same time. This typically the case for turn based games, games 
+where agents must react to events or games where agents can take 
+actions of variable duration.</p>
+<p>When you turn on <strong>On Demand Decisions</strong> for an agent, your agent code must call the <code>Agent.RequestDecision()</code> function. This function call starts one iteration of the observation-decision-action-reward cycle. The Brain invokes the agent's <code>CollectObservations()</code> method, makes a decision and returns it by calling the <code>AgentAction()</code> method. The Brain waits for the agent to request the next decision before starting another iteration.</p>
+<h2>Observations</h2>
+<p>To make decisions, an agent must observe its environment to determine its current state. A state observation can take the following forms:</p>
+<ul>
+<li><strong>Continuous Vector</strong> — a feature vector consisting of an array of numbers. </li>
+<li><strong>Discrete Vector</strong> — an index into a state table (typically only useful for the simplest of environments).</li>
+<li><strong>Visual Observations</strong> — one or more camera images.</li>
+</ul>
+<p>When you use the <strong>Continuous</strong> or <strong>Discrete</strong> vector observation space for an agent, implement the <code>Agent.CollectObservations()</code> method to create the feature vector or state index. When you use <strong>Visual Observations</strong>, you only need to identify which Unity Camera objects will provide images and the base Agent class handles the rest. You do not need to implement the <code>CollectObservations()</code> method when your agent uses visual observations (unless it also uses vector observations).</p>
+<h3>Continuous Vector Observation Space: Feature Vectors</h3>
+<p>For agents using a continuous state space, you create a feature vector to represent the agent's observation at each step of the simulation. The Brain class calls the <code>CollectObservations()</code> method of each of its agents. Your implementation of this function must call <code>AddVectorObs</code> to add vector observations. </p>
+<p>The observation must include all the information an agent needs to accomplish its task. Without sufficient and relevant information, an agent may learn poorly or may not learn at all. A reasonable approach for determining what information should be included is to consider what you would need to calculate an analytical solution to the problem. </p>
+<p>For examples of various state observation functions, you can look at the <a href="Learning-Environment-Examples.md">example environments</a> included in the ML-Agents SDK.  For instance, the 3DBall example uses the rotation of the platform, the relative position of the ball, and the velocity of the ball as its state observation. As an experiment, you can remove the velocity components from the observation and retrain the 3DBall agent. While it will learn to balance the ball reasonably well, the performance of the agent without using velocity is noticeably worse.</p>
+<p>```csharp
+public GameObject ball;</p>
+<p>private List<float> state = new List<float>();
+public override void CollectObservations()
+{
+    AddVectorObs(gameObject.transform.rotation.z);
+    AddVectorObs(gameObject.transform.rotation.x);
+    AddVectorObs((ball.transform.position.x - gameObject.transform.position.x));
+    AddVectorObs((ball.transform.position.y - gameObject.transform.position.y));
+    AddVectorObs((ball.transform.position.z - gameObject.transform.position.z));
+    AddVectorObs(ball.transform.GetComponent<Rigidbody>().velocity.x);
+    AddVectorObs(ball.transform.GetComponent<Rigidbody>().velocity.y);
+    AddVectorObs(ball.transform.GetComponent<Rigidbody>().velocity.z);
+}
+```</p>
+<p>The feature vector must always contain the same number of elements and observations must always be in the same position within the list. If the number of observed entities in an environment can vary you can pad the feature vector with zeros for any missing entities in a specific observation or you can limit an agent's observations to a fixed subset. For example, instead of observing every enemy agent in an environment, you could only observe the closest five. </p>
+<p>When you set up an Agent's brain in the Unity Editor, set the following properties to use a continuous vector observation:</p>
+<p><strong>Space Size</strong> — The state size must match the length of your feature vector.
+<strong>Space Type</strong> — Set to <strong>Continuous</strong>.
+<strong>Brain Type</strong> — Set to <strong>External</strong> during training; set to <strong>Internal</strong> to use the trained model.</p>
+<p>The observation feature vector is a list of floating point numbers, which means you must convert any other data types to a float or a list of floats. </p>
+<p>Integers can be be added directly to the observation vector. You must explicitly convert Boolean values to a number:</p>
+<p><code>csharp
+AddVectorObs(isTrueOrFalse ? 1 : 0);</code></p>
+<p>For entities like positions and rotations, you can add their components to the feature list individually.  For example:</p>
+<p><code>csharp
+Vector3 speed = ball.transform.GetComponent&lt;Rigidbody&gt;().velocity;
+AddVectorObs(speed.x);
+AddVectorObs(speed.y);
+AddVectorObs(speed.z);</code></p>
+<p>Type enumerations should be encoded in the <em>one-hot</em> style. That is, add an element to the feature vector for each element of enumeration, setting the element representing the observed member to one and set the rest to zero. For example, if your enumeration contains [Sword, Shield, Bow] and the agent observes that the current item is a Bow, you would add the elements: 0, 0, 1 to the feature vector. The following code example illustrates how to add </p>
+<p><code>csharp
+enum CarriedItems { Sword, Shield, Bow, LastItem }
+private List&lt;float&gt; state = new List&lt;float&gt;();
+public override void CollectObservations()
+{
+    for (int ci = 0; ci &lt; (int)CarriedItems.LastItem; ci++)
+    {
+        AddVectorObs((int)currentItem == ci ? 1.0f : 0.0f);            
+    }
+}</code></p>
+<h4>Normalization</h4>
+<p>For the best results when training, you should normalize the components of your feature vector to the range [-1, +1] or [0, 1]. When you normalize the values, the PPO neural network can often converge to a solution faster. Note that it isn't always necessary to normalize to these recommended ranges, but it is considered a best practice when using neural networks. The greater the variation in ranges between the components of your observation, the more likely that training will be affected.</p>
+<p>To normalize a value to [0, 1], you can use the following formula:</p>
+<p><code>csharp
+normalizedValue = (currentValue - minValue)/(maxValue - minValue)</code></p>
+<p>Rotations and angles should also be normalized. For angles between 0 and 360 degrees, you can use the following formulas:</p>
+<p><code>csharp
+Quaternion rotation = transform.rotation;
+Vector3 normalized = rotation.eulerAngles / 180.0f - Vector3.one;  // [-1,1]
+Vector3 normalized = rotation.eulerAngles / 360.0f;  // [0,1]</code></p>
+<p>For angles that can be outside the range [0,360], you can either reduce the angle, or, if the number of turns is significant, increase the maximum value used in your normalization formula.</p>
+<h3>Multiple Visual Observations</h3>
+<p>Camera observations use rendered textures from one or more cameras in a scene. The brain vectorizes the textures and feeds them into a neural network. You can use camera observations and either continuous feature vector or discrete state observations at the same time.</p>
+<p>Agents using camera images can capture state of arbitrary complexity and are useful when the state is difficult to describe numerically. However, they are also typically less efficient and slower to train, and sometimes don't succeed at all.  
+</p>
+<p>To add a visual observation to an agent, click on the <code>Add Camera</code> button in the Agent inspector. Then drag the camera you want to add to the <code>Camera</code> field. You can have more than one camera attached to an agent.</p>
+<p><img src="images/visual-observation.png" alt="Agent Camera" /> </p>
+<p>In addition, make sure that the Agent's Brain expects a visual observation. In the Brain inspector, under <code>Brain Parameters</code> -&gt; <code>Visual Observations</code>, specify the number of Cameras the agent is using for its visual observations. For each visual observation, set the width and height of the image (in pixels) and whether or not the observation is color or grayscale (when <code>Black And White</code> is checked).</p>
+<h3>Discrete Vector Observation Space: Table Lookup</h3>
+<p>You can use the discrete vector observation space when an agent only has a limited number of possible states and those states can be enumerated by a single number. For instance, the <a href="Learning-Environment-Examples.md#basic">Basic example environment</a> in ML-Agents defines an agent with a discrete vector observation space. The states of this agent are the integer steps between two linear goals. In the Basic example, the agent learns to move to the goal that provides the greatest reward.</p>
+<p>More generally, the discrete vector observation identifier could be an index into a table of the possible states. However, tables quickly become unwieldy as the environment becomes more complex. For example, even a simple game like <a href="https://en.wikipedia.org/wiki/Game_complexity">tic-tac-toe has 765 possible states</a> (far more if you don't reduce the number of observations by combining those that are rotations or reflections of each other).</p>
+<p>To implement a discrete state observation, implement the <code>CollectObservations()</code> method of your Agent subclass and return a <code>List</code> containing a single number representing the state:</p>
+<p><code>csharp
+public override void CollectObservations()
+{
+    AddVectorObs(stateIndex);  // stateIndex is the state identifier
+}</code></p>
+<h2>Vector Actions</h2>
+<p>An action is an instruction from the brain that the agent carries out. The action is passed to the agent as a parameter when the Academy invokes the agent's <code>AgentAction()</code> function. When you specify that the vector action space is <strong>Continuous</strong>, the action parameter passed to the agent is an array of control signals with length equal to the <code>Vector Action Space Size</code> property.  When you specify a <strong>Discrete</strong> vector action space type, the action parameter is an array containing only a single value, which is an index into your list or table of commands. In the <strong>Discrete</strong> vector action space type, the <code>Vector Action Space Size</code> is the number of elements in your action table. Set the <code>Vector Action Space Size</code> and <code>Vector Action Space Type</code> properties on the Brain object assigned to the agent (using the Unity Editor Inspector window). </p>
+<p>Neither the Brain nor the training algorithm know anything about what the action values themselves mean. The training algorithm simply tries different values for the action list and observes the affect on the accumulated rewards over time and many training episodes. Thus, the only place actions are defined for an agent is in the <code>AgentAction()</code> function. You simply specify the type of vector action space, and, for the continuous vector action space, the number of values, and then apply the received values appropriately (and consistently) in <code>ActionAct()</code>.</p>
+<p>For example, if you designed an agent to move in two dimensions, you could use either continuous or the discrete vector actions. In the continuous case, you would set the vector action size to two (one for each dimension), and the agent's brain would create an action with two floating point values. In the discrete case, you would set the vector action size to four (one for each direction), and the brain would create an action array containing a single element with a value ranging from zero to four.  
+</p>
+<p>Note that when you are programming actions for an agent, it is often helpful to test your action logic using a <strong>Player</strong> brain, which lets you map keyboard commands to actions. See <a href="Learning-Environment-Design-Brains.md">Brains</a>.</p>
+<p>The <a href="Learning-Environment-Examples.md#3dball-3d-balance-ball">3DBall</a> and <a href="Learning-Environment-Examples.md#push-block">Area</a> example environments are set up to use either the continuous or the discrete vector action spaces. </p>
+<h3>Continuous Action Space</h3>
+<p>When an agent uses a brain set to the <strong>Continuous</strong> vector action space, the action parameter passed to the agent's <code>AgentAction()</code> function is an array with length equal to the Brain object's <code>Vector Action Space Size</code> property value.  The individual values in the array have whatever meanings that you ascribe to them. If you assign an element in the array as the speed of an agent, for example, the training process learns to control the speed of the agent though this parameter. </p>
+<p>The <a href="Learning-Environment-Examples.md#reacher">Reacher example</a> defines a continuous action space with four control values. </p>
+<p><img src="images/reacher.png" /></p>
+<p>These control values are applied as torques to the bodies making up the arm :</p>
+<p>```csharp
+public override void AgentAction(float[] act)
+{
+    float torque<em>x = Mathf.Clamp(act[0], -1, 1) * 100f;
+    float torque</em>z = Mathf.Clamp(act[1], -1, 1) * 100f;
+    rbA.AddTorque(new Vector3(torque<em>x, 0f, torque</em>z));</p>
+<pre><code>torque_x = Mathf.Clamp(act[2], -1, 1) * 100f;
+torque_z = Mathf.Clamp(act[3], -1, 1) * 100f;
+rbB.AddTorque(new Vector3(torque_x, 0f, torque_z));
+</code></pre>
+
+<p>}
+```</p>
+<p>You should clamp continuous action values to a reasonable value (typically [-1,1]) to avoid introducing instability while training the agent with the PPO algorithm. As shown above, you can scale the control values as needed after clamping them. </p>
+<h3>Discrete Action Space</h3>
+<p>When an agent uses a brain set to the <strong>Discrete</strong> vector action space, the action parameter passed to the agent's <code>AgentAction()</code> function is an array containing a single element. The value is the index of the action to in your table or list of actions. With the discrete vector action space, <code>Vector Action Space Size</code> represents the number of actions in your action table.</p>
+<p>The <a href="Learning-Environment-Examples.md#push-block">Area example</a> defines five actions for the discrete vector action space: a jump action and one action for each cardinal direction:</p>
+<p>```csharp
+// Get the action index
+int movement = Mathf.FloorToInt(act[0]); </p>
+<p>// Look up the index in the action list:
+if (movement == 1) { directionX = -1; }
+if (movement == 2) { directionX = 1; }
+if (movement == 3) { directionZ = -1; }
+if (movement == 4) { directionZ = 1; }
+if (movement == 5 &amp;&amp; GetComponent<Rigidbody>().velocity.y &lt;= 0) { directionY = 1; }</p>
+<p>// Apply the action results to move the agent
+gameObject.GetComponent<Rigidbody>().AddForce(
+    new Vector3(
+        directionX * 40f, directionY * 300f, directionZ * 40f));
+```</p>
+<p>Note that the above code example is a simplified extract from the AreaAgent class, which provides alternate implementations for both the discrete and the continuous action spaces.</p>
+<h2>Rewards</h2>
+<p>In reinforcement learning, the reward is a signal that the agent has done something right. The PPO reinforcement learning algorithm works by optimizing the choices an agent makes such that the agent earns the highest cumulative reward over time. The better your reward mechanism, the better your agent will learn.</p>
+<p><strong>Note:</strong> Rewards are not used during inference by a brain using an already trained policy and is also not used during imitation learning.</p>
+<p>Perhaps the best advice is to start simple and only add complexity as needed. In general, you should reward results rather than actions you think will lead to the desired results. To help develop your rewards, you can use the Monitor class to display the cumulative reward received by an agent. You can even use a Player brain to control the agent while watching how it accumulates rewards.</p>
+<p>Allocate rewards to an agent by calling the <code>AddReward()</code> method in the <code>AgentAction()</code> function. The reward assigned in any step should be in the range [-1,1].  Values outside this range can lead to unstable training. The <code>reward</code> value is reset to zero at every step. </p>
+<p><strong>Examples</strong></p>
+<p>You can examine the <code>AgentAction()</code> functions defined in the <a href="Learning-Environment-Examples.md">example environments</a> to see how those projects allocate rewards.</p>
+<p>The <code>GridAgent</code> class in the <a href="Learning-Environment-Examples.md#gridworld">GridWorld example</a> uses a very simple reward system:</p>
+<p><code>csharp
+Collider[] hitObjects = Physics.OverlapBox(trueAgent.transform.position, 
+                                           new Vector3(0.3f, 0.3f, 0.3f));
+if (hitObjects.Where(col =&gt; col.gameObject.tag == &quot;goal&quot;).ToArray().Length == 1)
+{
+    AddReward(1.0f);
+    Done();
+}
+if (hitObjects.Where(col =&gt; col.gameObject.tag == &quot;pit&quot;).ToArray().Length == 1)
+{
+    AddReward(-1f);
+    Done();
+}</code></p>
+<p>The agent receives a positive reward when it reaches the goal and a negative reward when it falls into the pit. Otherwise, it gets no rewards. This is an example of a <em>sparse</em> reward system. The agent must explore a lot to find the infrequent reward.</p>
+<p>In contrast, the <code>AreaAgent</code> in the <a href="Learning-Environment-Examples.md#push-block">Area example</a> gets a small negative reward every step. In order to get the maximum reward, the agent must finish its task of reaching the goal square as quickly as possible:</p>
+<p>```csharp
+AddReward( -0.005f);
+MoveAgent(act);</p>
+<p>if (gameObject.transform.position.y &lt; 0.0f || 
+    Mathf.Abs(gameObject.transform.position.x - area.transform.position.x) &gt; 8f || 
+    Mathf.Abs(gameObject.transform.position.z + 5 - area.transform.position.z) &gt; 8)
+{
+    Done();
+    AddReward(-1f);
+}
+```</p>
+<p>The agent also gets a larger negative penalty if it falls off the playing surface.</p>
+<p>The <code>Ball3DAgent</code> in the <a href="Learning-Environment-Examples.md#3dball-3d-balance-ball">3DBall</a> takes a similar approach, but allocates a small positive reward as long as the agent balances the ball. The agent can maximize its rewards by keeping the ball on the platform:</p>
+<p>```csharp
+if (IsDone() == false)
+{
+    SetReward(0.1f);
+}</p>
+<p>// When ball falls mark agent as done and give a negative penalty
+if ((ball.transform.position.y - gameObject.transform.position.y) &lt; -2f ||
+    Mathf.Abs(ball.transform.position.x - gameObject.transform.position.x) &gt; 3f ||
+    Mathf.Abs(ball.transform.position.z - gameObject.transform.position.z) &gt; 3f)
+{
+    Done();
+    SetReward(-1f);
+}
+```</p>
+<p>The <code>Ball3DAgent</code> also assigns a negative penalty when the ball falls off the platform.</p>
+<h2>Agent Properties</h2>
+<p><img src="images/agent.png" alt="Agent Inspector" /></p>
+<ul>
+<li><code>Brain</code> - The brain to register this agent to. Can be dragged into the inspector using the Editor.</li>
+<li><code>Visual Observations</code> - A list of <code>Cameras</code> which will be used to generate observations.</li>
+<li><code>Max Step</code> - The per-agent maximum number of steps. Once this number is reached, the agent will be reset if <code>Reset On Done</code> is checked.</li>
+<li><code>Reset On Done</code> - Whether the agent's <code>AgentReset()</code> function should be called when the agent reaches its <code>Max Step</code> count or is marked as done in code.</li>
+<li>
+<code>On Demand Decision</code> - Whether the agent requests decisions at a fixed step interval or explicitly requests decisions by calling <code>RequestDecision()</code>.
+<ul>
+<li>
+If not checked, the Agent will request a new 
+decision every <code>Decision Frequency</code> steps and 
+perform an action every step. In the example above, 
+<code>CollectObservations()</code> will be called every 5 steps and 
+<code>AgentAction()</code> will be called at every step. This means that the 
+Agent will reuse the decision the Brain has given it. 
+</li>
+<li>
+If checked, the Agent controls when to receive
+decisions, and take actions. To do so, the Agent may leverage one or two methods:
+<ul>
+<li>
+<code>RequestDecision()</code> Signals that the Agent is requesting a decision.
+This causes the Agent to collect its observations and ask the Brain for a 
+decision at the next step of the simulation. Note that when an Agent 
+requests a decision, it also request an action. 
+This is to ensure that all decisions lead to an action during training.
+</li>
+<li>
+<code>RequestAction()</code> Signals that the Agent is requesting an action. The
+action provided to the Agent in this case is the same action that was
+provided the last time it requested a decision. 
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>Decision Frequency</code> - The number of steps between decision requests. Not used if <code>On Demand Decision</code>, is true. </li>
+</ul>
+<h2>Monitoring Agents</h2>
+<p>We created a helpful <code>Monitor</code> class that enables visualizing variables within
+a Unity environment. While this was built for monitoring an Agent's value
+function throughout the training process, we imagine it can be more broadly
+useful. You can learn more <a href="Feature-Monitor.md">here</a>.</p>
+<h2>Instantiating an Agent at Runtime</h2>
+<p>To add an Agent to an environment at runtime, use the Unity <code>GameObject.Instantiate()</code> function. It is typically easiest to instantiate an agent from a <a href="https://docs.unity3d.com/Manual/Prefabs.html">Prefab</a> (otherwise, you have to instantiate every GameObject and Component that make up your agent individually). In addition, you must assign a Brain instance to the new Agent and initialize it by calling its <code>AgentReset()</code> method. For example, the following function creates a new agent given a Prefab, Brain instance, location, and orientation:</p>
+<p><code>csharp
+private void CreateAgent(GameObject agentPrefab, Brain brain, Vector3 position, Quaternion orientation)
+{
+    GameObject agentObj = Instantiate(agentPrefab, position, orientation);
+    Agent agent = agentObj.GetComponent&lt;Agent&gt;();
+    agent.GiveBrain(brain);
+    agent.AgentReset();
+}</code></p>
+<h2>Destroying an Agent</h2>
+<p>Before destroying an Agent GameObject, you must mark it as done (and wait for the next step in the simulation) so that the Brain knows that this agent is no longer active. Thus, the best place to destroy an agent is in the <code>Agent.AgentOnDone()</code> function:</p>
+<p><code>csharp
+public override void AgentOnDone()
+{
+    Destroy(gameObject);
+}</code></p>
+<p>Note that in order for <code>AgentOnDone()</code> to be called, the agent's <code>ResetOnDone</code> property must be false. You can set <code>ResetOnDone</code> on the agent's Inspector or in code. </p>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->
